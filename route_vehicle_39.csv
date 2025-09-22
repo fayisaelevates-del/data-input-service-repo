@@ -1,0 +1,2 @@
+sequence,stop,lat,lon,eta_sec,service_sec,depart_sec,eta_hhmm,depart_hhmm,violates_shift
+1,0,32.257254,-110.9723225,0,0,0,05:00,05:00,False

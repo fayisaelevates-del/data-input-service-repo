@@ -1,0 +1,22 @@
+{
+  "k": 2,
+  "clusters": [
+    {
+      "size": 3,
+      "demand": 15,
+      "indices": [
+        5,
+        3,
+        2
+      ]
+    },
+    {
+      "size": 2,
+      "demand": 10,
+      "indices": [
+        1,
+        4
+      ]
+    }
+  ]
+}

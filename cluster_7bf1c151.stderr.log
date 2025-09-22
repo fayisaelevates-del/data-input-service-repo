@@ -1,0 +1,7 @@
+Traceback (most recent call last):
+  File "c:\Users\safer\OneDrive\Documents\Route Management Code\mycloudrunproject\vrp_prototype.py", line 426, in <module>
+    STOPS = [tuple(s) for s in data.get('stops', STOPS)]
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\safer\OneDrive\Documents\Route Management Code\mycloudrunproject\vrp_prototype.py", line 336, in solve_vrp
+    start, end = tws[node]
+RuntimeError: No solution found

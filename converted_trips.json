@@ -1,0 +1,189 @@
+{
+  "drivers": [
+    {
+      "id": "drv-1",
+      "lat": 32.257254,
+      "lon": -110.9723225,
+      "label": "Depot / Vehicle 1",
+      "active": true
+    }
+  ],
+  "trips": [
+    {
+      "id": "trip-1",
+      "lat": 32.257254,
+      "lon": -110.9723225,
+      "label": "54126 2761 N Stone Ave, Tucson, AZ 85705",
+      "demand": 1,
+      "service_sec": 600,
+      "tw_start": 18000,
+      "tw_end": 61200,
+      "source_row": 1
+    },
+    {
+      "id": "trip-2",
+      "lat": 32.2753731,
+      "lon": -110.9443301,
+      "label": "54126 2761 N Stone Ave, Tucson, AZ 85705 3765 N Campbell Ave, Tucson, Arizona 85719",
+      "demand": 1,
+      "service_sec": 600,
+      "tw_start": 18000,
+      "tw_end": 61200,
+      "source_row": 1
+    },
+    {
+      "id": "trip-3",
+      "lat": 32.1162014,
+      "lon": -111.0419424,
+      "label": "9723225 3765 N Campbell Ave, Tucson, Arizona 85719 3535 West Messala Way, Tucson, Arizona 85746",
+      "demand": 1,
+      "service_sec": 600,
+      "tw_start": 18000,
+      "tw_end": 61200,
+      "source_row": 1
+    },
+    {
+      "id": "trip-4",
+      "lat": 32.2196374,
+      "lon": -111.0229979,
+      "label": "4126 3535 West Messala Way, Tucson, Arizona 85746 2610 West Calle Puebla, Tucson, Arizona 85745",
+      "demand": 1,
+      "service_sec": 600,
+      "tw_start": 18000,
+      "tw_end": 61200,
+      "source_row": 2
+    },
+    {
+      "id": "trip-5",
+      "lat": 32.4078759,
+      "lon": -111.0204164,
+      "label": "West Calle Puebla, Tucson, Arizona 85745 2475 West Naranja Drive, Oro Valley, Arizona 85742",
+      "demand": 1,
+      "service_sec": 600,
+      "tw_start": 18000,
+      "tw_end": 61200,
+      "source_row": 2
+    },
+    {
+      "id": "trip-6",
+      "lat": 32.1919002,
+      "lon": -110.9726446,
+      "label": "54126 3765 N Campbell Ave, Tucson, Arizona 85719 2600 South 8th Avenue, Tucson, Arizona 85713",
+      "demand": 1,
+      "service_sec": 600,
+      "tw_start": 18000,
+      "tw_end": 61200,
+      "source_row": 5
+    },
+    {
+      "id": "trip-7",
+      "lat": 32.1495514,
+      "lon": -111.0237159,
+      "label": "2600 South 8th Avenue, Tucson, Arizona 85713 5623 South Robin Avenue, Tucson, Arizona 85746",
+      "demand": 1,
+      "service_sec": 600,
+      "tw_start": 18000,
+      "tw_end": 61200,
+      "source_row": 5
+    },
+    {
+      "id": "trip-8",
+      "lat": 32.2723617,
+      "lon": -110.9674986,
+      "label": "4126 5623 South Robin Avenue, Tucson, Arizona 85746 315 East Prince Road, Tucson, Arizona 85705",
+      "demand": 1,
+      "service_sec": 600,
+      "tw_start": 18000,
+      "tw_end": 61200,
+      "source_row": 6
+    },
+    {
+      "id": "trip-9",
+      "lat": 32.5109786,
+      "lon": -110.9222564,
+      "label": "111.0237159 315 East Prince Road, Tucson, Arizona 85705 3302 E Edwin Rd, Tucson, Arizona 85739",
+      "demand": 1,
+      "service_sec": 600,
+      "tw_start": 18000,
+      "tw_end": 61200,
+      "source_row": 6
+    },
+    {
+      "id": "trip-10",
+      "lat": 32.500153,
+      "lon": -110.9103649,
+      "label": "315 East Prince Road, Tucson, Arizona 85705 3850 East Tortolita Street, Tucson, Arizona 85739",
+      "demand": 1,
+      "service_sec": 600,
+      "tw_start": 18000,
+      "tw_end": 61200,
+      "source_row": 9
+    },
+    {
+      "id": "trip-11",
+      "lat": 32.3451874,
+      "lon": -110.9872146,
+      "label": "3850 East Tortolita Street, Tucson, Arizona 85739 1000 West Chapala Drive, Tucson, Arizona 85704",
+      "demand": 1,
+      "service_sec": 600,
+      "tw_start": 18000,
+      "tw_end": 61200,
+      "source_row": 9
+    },
+    {
+      "id": "trip-12",
+      "lat": 32.44877,
+      "lon": -110.9366589,
+      "label": "West Chapala Drive, Tucson, Arizona 85704 2362 East Wide View Court, Oro Valley, Arizona 85755",
+      "demand": 1,
+      "service_sec": 600,
+      "tw_start": 18000,
+      "tw_end": 61200,
+      "source_row": 10
+    },
+    {
+      "id": "trip-13",
+      "lat": 32.2741522,
+      "lon": -110.9675826,
+      "label": "2362 East Wide View Court, Oro Valley, Arizona 85755 266 East Pastime Road, Tucson, Arizona 85705",
+      "demand": 1,
+      "service_sec": 600,
+      "tw_start": 18000,
+      "tw_end": 61200,
+      "source_row": 10
+    },
+    {
+      "id": "trip-14",
+      "lat": 32.3334812,
+      "lon": -111.0113914,
+      "label": "36544 2761 N Stone Ave, Tucson, AZ 85705 2040 West Omar Drive, Tucson, Arizona 85704",
+      "demand": 1,
+      "service_sec": 600,
+      "tw_start": 18000,
+      "tw_end": 61200,
+      "source_row": 12
+    },
+    {
+      "id": "trip-15",
+      "lat": 32.3819407,
+      "lon": -111.0246824,
+      "label": "2040 West Omar Drive, Tucson, Arizona 85704 2651 West Camino Del Medrano, Tucson, Arizona 85742",
+      "demand": 1,
+      "service_sec": 600,
+      "tw_start": 18000,
+      "tw_end": 61200,
+      "source_row": 12
+    },
+    {
+      "id": "trip-16",
+      "lat": 32.4755863,
+      "lon": -110.9212319,
+      "label": "39354 2761 N Stone Ave, Tucson, AZ 85705 3401 East Wilds Road, Tucson, Arizona 85739",
+      "demand": 1,
+      "service_sec": 600,
+      "tw_start": 18000,
+      "tw_end": 61200,
+      "source_row": 15
+    }
+  ]
+}

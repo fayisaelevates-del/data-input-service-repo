@@ -1,0 +1,63 @@
+{
+  "cluster": [
+    165,
+    169
+  ],
+  "depot": 0,
+  "stops": [
+    [
+      32.257254,
+      -110.9723225
+    ],
+    [
+      32.262451400315626,
+      -111.0566115880354
+    ],
+    [
+      32.2620211533439,
+      -111.05754729323405
+    ]
+  ],
+  "demands": [
+    0,
+    1,
+    1
+  ],
+  "service_times": [
+    0,
+    0,
+    0
+  ],
+  "time_windows": [
+    [
+      18000,
+      61200
+    ],
+    [
+      18000,
+      61200
+    ],
+    [
+      18000,
+      61200
+    ]
+  ],
+  "time_matrix": [
+    [
+      0,
+      572,
+      578
+    ],
+    [
+      572,
+      0,
+      7
+    ],
+    [
+      578,
+      7,
+      0
+    ]
+  ],
+  "stderr_excerpt": "Traceback (most recent call last):\r\n  File \"C:\\Users\\safer\\OneDrive\\Documents\\Route Management Code\\mycloudrunproject\\vrp_prototype.py\", line 492, in time_callback\r\n    def time_callback(from_index, to_index):\r\n                    ^^^^^^^^^^^^^^^^^^^^^^^^\r\n  File \"C:\\Users\\safer\\AppData\\Local\\Programs\\Python\\Python313\\Lib\\site-packages\\ortools\\constraint_solver\\pywrapcp.py\", line 4770, in IndexToNode\r\n    return _pywrapcp.RoutingIndexManager_IndexToNode(self, index)\r\n           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^\r\nOverflowError: in method 'RoutingIndexManager_IndexToNode', argument 2 of type 'int64_t'\r\n\r\nThe above exception was the direct cause of the following exception:\r\n\r\nTraceback (most recent call last):\r\n  File \"C:\\Users\\safer\\OneDrive\\Documents\\Route Management Code\\mycloudrunproject\\vrp_prototype.py\", line 840, in <module>\r\n    sub_time_windows = [TIME_WINDOWS[depot]] + [TIME_WINDOWS[i] if i < len(TIME_WINDOWS) else TIME_WINDOWS[depot] for i in cluster]\r\n                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\r\n  File \"C:\\Users\\safer\\OneDrive\\Documents\\Route Management Code\\mycloudrunproject\\vrp_prototype.py\", line 597, in solve_vrp\r\n  File \"C:\\Users\\safer\\AppData\\Local\\Programs\\Python\\Python313\\Lib\\site-packages\\ortools\\constraint_solver\\pywrapcp.py\", line 5652, in SolveWithParameters\r\n    return _pywrapcp.RoutingModel_SolveWithParameters(self, search_parameters, solutions)\r\n           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\r\nSystemError: <built-in function RoutingModel_SolveWithParameters> returned a result with an exception set\r\n"
+}

@@ -1,0 +1,79 @@
+name: CI
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+
+jobs:
+  lint:
+    name: Lint & Typecheck
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: [3.11]
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Cache pip
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{ matrix.python-version }}-${{ hashFiles('**/requirements*.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-${{ matrix.python-version }}-
+
+      - name: Install dev dependencies
+        run: |
+          python -m pip install --upgrade pip
+          if [ -f requirements-dev.txt ]; then pip install -r requirements-dev.txt; fi
+
+      - name: Run ruff
+        run: |
+          ruff check .
+
+      - name: Run mypy
+        run: |
+          mypy
+
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: [3.10, 3.11, 3.12]
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Cache pip
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{ matrix.python-version }}-${{ hashFiles('**/requirements*.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-${{ matrix.python-version }}-
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          if [ -f requirements-dev.txt ]; then pip install -r requirements-dev.txt; \
+          elif [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+
+      - name: Run tests
+        run: |
+          pytest -q
+        env:
+          # Ensure the tests use a local sqlite DB and don't try to use production
+          # services. Tests in this repo typically set ROUTES_DB_PATH in-test, but
+          # setting a default here keeps runs deterministic.
+          ROUTES_DB_PATH: ${{ runner.temp }}/data.db
