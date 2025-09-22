@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    <script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-glyphicons.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.2.0/css/all.min.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/python-visualization/folium/folium/templates/leaflet.awesome.rotate.min.css"/>
+    
+            <meta name="viewport" content="width=device-width,
+                initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+            <style>
+                #map_1f785dde59f51e80fa722a760db71db2 {
+                    position: relative;
+                    width: 100.0%;
+                    height: 100.0%;
+                    <!doctype html>
+                    <html lang="en">
+                    <head>
+                        <meta charset="utf-8" />
+                        <meta name="viewport" content="width=device-width,initial-scale=1" />
+                        <title>Stops Map</title>
+                        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.css" />
+                        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" />
+                        <style>
+                            :root{--topbar-height:56px;}
+                            html,body,#map { height:100%; margin:0; }
+                            body{font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;}
+                            .topbar{height:var(--topbar-height);display:flex;align-items:center;padding:0 12px;background:#0d6efd;color:#fff}
+                            .topbar .title{font-weight:600;margin-left:8px}
+                            #map{position:fixed;top:var(--topbar-height);bottom:0;left:0;right:0}
+                            .map-controls{position:fixed;top:72px;right:12px;z-index:1200;display:flex;flex-direction:column;gap:6px}
+                            .map-btn{background:#fff;border-radius:6px;padding:8px 10px;box-shadow:0 1px 6px rgba(0,0,0,0.15);cursor:pointer;border:none}
+                            .leaflet-popup-content{font-size:0.95rem}
+                            /* numbered marker style */
+                            .num-icon{display:flex;align-items:center;justify-content:center;border-radius:14px;color:#fff;font-weight:700;width:28px;height:28px;border:3px solid rgba(0,0,0,0.12);box-shadow:0 2px 6px rgba(0,0,0,0.18);transform:scale(1);transition:transform .12s ease, box-shadow .12s ease}
+                            .num-icon:hover{transform:scale(1.18);box-shadow:0 6px 14px rgba(0,0,0,0.28)}
+                        </style>
+                    </head>
+                    <body>
+                        <div class="topbar">
+                            <img src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='28' height='28' viewBox='0 0 24 24' fill='none' stroke='%23fff' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'><path d='M21 10c0 6-9 13-9 13S3 16 3 10a9 9 0 1 1 18 0z'></path><circle cx='12' cy='10' r='3'></circle></svg>" alt="logo" style="height:28px;opacity:.95"/>
+                            <div class="title">Stops Map</div>
+                            <div style="flex:1"></div>
+                            <div style="font-size:.9rem;opacity:.95">Smooth | Clean | Responsive</div>
+                        </div>
+
+                        <div id="map"></div>
+
+                        <div class="map-controls" role="group" aria-label="map controls">
+                            <button class="map-btn" id="fitBoundsBtn" title="Fit view to all stops">🔎 Fit</button>
+                            <button class="map-btn" id="locateBtn" title="Locate me">📍 Locate</button>
+                        </div>
+
+                        <script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.js"></script>
+                        <script>
+                            (function(){
+                                const stops = [
+                                    {id:1, lat:32.257254, lon:-110.9723225, label:'Stop 1'},
+                                    {id:2, lat:32.1162014, lon:-111.0419424, label:'Stop 2'},
+                                    {id:3, lat:32.4078759, lon:-111.0204164, label:'Stop 3'},
+                                    {id:4, lat:32.2753731, lon:-110.9443301, label:'Stop 4'},
+                                    {id:5, lat:32.1495514, lon:-111.0237159, label:'Stop 5'},
+                                    {id:6, lat:32.5109786, lon:-110.9222564, label:'Stop 6'},
+                                    {id:7, lat:32.2723617, lon:-110.9674986, label:'Stop 7'},
+                                    {id:8, lat:32.3451874, lon:-110.9872146, label:'Stop 8'}
+                                ];
+
+                                const map = L.map('map', {center:[32.257254, -110.9723225], zoom:11, zoomControl:true});
+                                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19, attribution:'© OpenStreetMap contributors'}).addTo(map);
+
+                                const markers = L.featureGroup().addTo(map);
+
+                                // color palette
+                                const colors = ['#e4572e','#2a9d8f','#2b5dff','#f4a261','#6a4c93','#ff6b6b','#1982c4','#4caf50'];
+
+                                function makeDivIcon(num, color){
+                                    const el = document.createElement('div');
+                                    el.className = 'num-icon';
+                                    el.style.background = color;
+                                    el.innerText = num;
+                                    return L.divIcon({className: '', html: el.outerHTML, iconSize:[28,28], iconAnchor:[14,28], popupAnchor:[0,-30]});
+                                }
+
+                                stops.forEach((s,i)=>{
+                                    const icon = makeDivIcon(i+1, colors[i % colors.length]);
+                                    const m = L.marker([s.lat, s.lon], {icon}).addTo(markers);
+                                    const popupHtml = `<div style="min-width:160px"><strong>Stop ${s.id}</strong><div style="margin-top:6px; color:#444">${s.label}</div><div style="font-size:12px;color:#666;margin-top:8px">${s.lat.toFixed(6)}, ${s.lon.toFixed(6)}</div></div>`;
+                                    m.bindPopup(popupHtml, {maxWidth:240});
+                                    m.on('mouseover', ()=>{ m.openPopup(); });
+                                    m.on('mouseout', ()=>{ m.closePopup(); });
+                                });
+
+                                // fit to markers
+                                document.getElementById('fitBoundsBtn').addEventListener('click', ()=>{ if(markers.getLayers().length) map.fitBounds(markers.getBounds().pad(0.08)); });
+
+                                // locate control
+                                document.getElementById('locateBtn').addEventListener('click', ()=>{
+                                    map.locate({setView:true, maxZoom:14});
+                                });
+
+                                map.on('locationfound', function(e){
+                                    const r = L.circle(e.latlng, {radius: Math.max(e.accuracy,25), color:'#2a9d8f', fillOpacity:0.12}).addTo(map);
+                                    setTimeout(()=>{ map.removeLayer(r); }, 5000);
+                                });
+
+                                // initial fit
+                                if(markers.getLayers().length) map.fitBounds(markers.getBounds().pad(0.08));
+
+                                // keyboard shortcuts: F to fit, L to locate
+                                document.addEventListener('keydown', (ev)=>{ if(ev.key === 'f' || ev.key === 'F'){ document.getElementById('fitBoundsBtn').click(); } if(ev.key==='l' || ev.key==='L'){ document.getElementById('locateBtn').click(); } });
+
+                            })();
+                        </script>
+                    </body>
+                    </html>
+    
+            var circle_marker_a559b9c14073ff68a8ff9dc041490ba5 = L.circleMarker(
+                [32.1916, -110.9265],
+                {"bubblingMouseEvents": true, "color": "red", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "red", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 4, "stroke": true, "weight": 3}
+            ).addTo(map_1f785dde59f51e80fa722a760db71db2);
+        
+    
+            var circle_marker_12de4ce563bfce7fe6d8f29a7e039fb5 = L.circleMarker(
+                [32.1328, -110.9474],
+                {"bubblingMouseEvents": true, "color": "red", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "red", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 4, "stroke": true, "weight": 3}
+            ).addTo(map_1f785dde59f51e80fa722a760db71db2);
+        
+    
+            var circle_marker_4f259d7a835740f981bd90dbbce15492 = L.circleMarker(
+                [32.2226, -110.9747],
+                {"bubblingMouseEvents": true, "color": "red", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "red", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 4, "stroke": true, "weight": 3}
+            ).addTo(map_1f785dde59f51e80fa722a760db71db2);
+        
+    
+            var poly_line_129bc0d2127949e8d9ae6eedb56dd8d2 = L.polyline(
+                [[32.2226, -110.9747], [32.239, -110.955], [32.2608, -110.935], [32.3546, -110.9771], [32.2226, -110.9747]],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": false, "fillColor": "blue", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "noClip": false, "opacity": 0.7, "smoothFactor": 1.0, "stroke": true, "weight": 4}
+            ).addTo(map_1f785dde59f51e80fa722a760db71db2);
+        
+    
+            var circle_marker_0bf6af9d545d83dc19f8bc2ca2d116f8 = L.circleMarker(
+                [32.2226, -110.9747],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 4, "stroke": true, "weight": 3}
+            ).addTo(map_1f785dde59f51e80fa722a760db71db2);
+        
+    
+            var circle_marker_8b3a9672ccfe14a9f3055681fe79215f = L.circleMarker(
+                [32.239, -110.955],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 4, "stroke": true, "weight": 3}
+            ).addTo(map_1f785dde59f51e80fa722a760db71db2);
+        
+    
+            var circle_marker_a09a250bd8bdd5429e4fe2c1fa919908 = L.circleMarker(
+                [32.2608, -110.935],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 4, "stroke": true, "weight": 3}
+            ).addTo(map_1f785dde59f51e80fa722a760db71db2);
+        
+    
+            var circle_marker_65e0b760bc9ec76d3842fe4b289ea922 = L.circleMarker(
+                [32.3546, -110.9771],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 4, "stroke": true, "weight": 3}
+            ).addTo(map_1f785dde59f51e80fa722a760db71db2);
+        
+    
+            var circle_marker_3502b3506c0f42113918f40d813dbbd8 = L.circleMarker(
+                [32.2226, -110.9747],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 1.0, "radius": 4, "stroke": true, "weight": 3}
+            ).addTo(map_1f785dde59f51e80fa722a760db71db2);
+        
+</script>
+</html>

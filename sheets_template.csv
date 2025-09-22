@@ -1,0 +1,2 @@
+id,address,lat,lon,demand,service_time,tw_start,tw_end,kid_type,miles,time_minutes,notes
+0,Depot,32.257254,-110.9723225,0,0,0,28800,,,

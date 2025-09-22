@@ -1,0 +1,10 @@
+{
+  "num_vehicles_requested": 2,
+  "initial_clusters": 2,
+  "total_tasks": 2,
+  "collected_routes": 2,
+  "ors_calls": 0,
+  "ors_failures": 0,
+  "cache_hits": 1,
+  "greedy_fallbacks": 1
+}

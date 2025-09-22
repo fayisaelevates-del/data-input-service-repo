@@ -1,0 +1,83 @@
+{
+  "cluster": [
+    5,
+    3,
+    2
+  ],
+  "depot": 0,
+  "stops": [
+    [
+      32.2226,
+      -110.9747
+    ],
+    [
+      32.1328,
+      -110.9474
+    ],
+    [
+      32.1916,
+      -110.9265
+    ],
+    [
+      32.222,
+      -110.9265
+    ]
+  ],
+  "demands": [
+    0,
+    5,
+    5,
+    5
+  ],
+  "service_times": [
+    0,
+    600,
+    600,
+    600
+  ],
+  "time_windows": [
+    [
+      18000,
+      61200
+    ],
+    [
+      18000,
+      61200
+    ],
+    [
+      18000,
+      61200
+    ],
+    [
+      18000,
+      61200
+    ]
+  ],
+  "time_matrix": [
+    [
+      0,
+      742,
+      410,
+      326
+    ],
+    [
+      742,
+      0,
+      491,
+      728
+    ],
+    [
+      410,
+      491,
+      0,
+      243
+    ],
+    [
+      326,
+      728,
+      243,
+      0
+    ]
+  ],
+  "stderr_excerpt": "Traceback (most recent call last):\r\n  File \"c:\\Users\\safer\\OneDrive\\Documents\\Route Management Code\\mycloudrunproject\\vrp_prototype.py\", line 870, in <module>\r\n    sub_routes = solve_vrp(sub_tm, 1, 0, demands=sub_demands, vehicle_capacities=[single_cap], service_times=sub_service_times, time_windows=sub_time_windows)\r\n  File \"c:\\Users\\safer\\OneDrive\\Documents\\Route Management Code\\mycloudrunproject\\vrp_prototype.py\", line 605, in solve_vrp\r\n    raise RuntimeError('No solution found')\r\nRuntimeError: No solution found\r\n"
+}

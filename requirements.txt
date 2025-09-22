@@ -2,4 +2,16 @@ pandas
 psycopg2-binary
 google-cloud-storage
 googlemaps
-ose i am to
+folium
+ortools
+openrouteservice
+requests
+google-api-python-client
+google-auth
+numpy
+fastapi
+uvicorn
+# test/dev
+pytest
+ruff
+mypy

@@ -1,0 +1,38 @@
+{
+  "assignments": {
+    "drv-1": {"assigned_last": "trip-1"},
+    "drv-2": {"assigned_last": "trip-5"},
+    "drv-3": {"assigned_last": "trip-3"}
+  },
+  "preview_routes": {
+    "drv-1": {
+      "route": [[32.2226, -110.9747], [32.2319, -110.9501], [32.2220, -110.9265], [32.1916, -110.9265], [32.1328, -110.9474], [32.2226, -110.9747]],
+      "stops": [
+        {"sequence": 1, "stop_index": 1, "lat": 32.2319, "lon": -110.9501, "eta_sec": 600, "depart_sec": 1200, "eta_hhmm": "06:10", "depart_hhmm": "06:20", "service_sec": 600, "trip_id": "trip-1", "label": "Tucson 1"},
+        {"sequence": 2, "stop_index": 2, "lat": 32.2220, "lon": -110.9265, "eta_sec": 1800, "depart_sec": 2400, "eta_hhmm": "06:30", "depart_hhmm": "06:40", "service_sec": 600, "trip_id": "trip-2", "label": "Tucson 2"},
+        {"sequence": 3, "stop_index": 3, "lat": 32.1916, "lon": -110.9265, "eta_sec": 2600, "depart_sec": 3200, "eta_hhmm": "06:43", "depart_hhmm": "06:53", "service_sec": 600, "trip_id": "trip-3", "label": "Tucson 3"},
+        {"sequence": 4, "stop_index": 4, "lat": 32.1328, "lon": -110.9474, "eta_sec": 3800, "depart_sec": 4400, "eta_hhmm": "07:13", "depart_hhmm": "07:23", "service_sec": 600, "trip_id": "trip-4", "label": "Tucson 4"}
+      ]
+    },
+    "drv-2": {
+      "route": [[32.2226, -110.9747], [32.2390, -110.9550], [32.2608, -110.9350], [32.3546, -110.9771], [32.2226, -110.9747]],
+      "stops": [
+        {"sequence": 1, "stop_index": 1, "lat": 32.2390, "lon": -110.9550, "eta_sec": 700, "depart_sec": 1300, "eta_hhmm": "06:11", "depart_hhmm": "06:21", "service_sec": 600, "trip_id": "trip-5", "label": "Tucson 5"},
+        {"sequence": 2, "stop_index": 2, "lat": 32.2608, "lon": -110.9350, "eta_sec": 1900, "depart_sec": 2500, "eta_hhmm": "06:31", "depart_hhmm": "06:41", "service_sec": 600, "trip_id": "trip-6", "label": "Tucson 6"},
+        {"sequence": 3, "stop_index": 3, "lat": 32.3546, "lon": -110.9771, "eta_sec": 2900, "depart_sec": 3500, "eta_hhmm": "06:50", "depart_hhmm": "07:00", "service_sec": 600, "trip_id": "trip-7", "label": "Tucson 7"}
+      ]
+    },
+    "drv-3": {
+      "route": [[32.2226, -110.9747], [32.2220, -110.9265], [32.2226, -110.9747]],
+      "stops": [
+        {"sequence": 1, "stop_index": 1, "lat": 32.2220, "lon": -110.9265, "eta_sec": 800, "depart_sec": 1400, "eta_hhmm": "06:13", "depart_hhmm": "06:23", "service_sec": 600, "trip_id": "trip-2", "label": "Tucson 2"}
+      ]
+    }
+  },
+  "per_driver_trip_ids": {
+    "drv-1": ["trip-1","trip-2","trip-3","trip-4"],
+    "drv-2": ["trip-5","trip-6","trip-7"],
+    "drv-3": ["trip-2"]
+  },
+  "remaining": []
+}

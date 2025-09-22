@@ -1,0 +1,19 @@
+c:\Users\safer\OneDrive\Documents\Route Management Code\mycloudrunproject\serve_routes.py:1347: SyntaxWarning: invalid escape sequence '\s'
+  let rows = lines.map(l => delim ? l.split(delim).map(c=>c.trim()) : l.split(/\s+/));
+WARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://192.168.33.75:5000
+Press CTRL+C to quit
+127.0.0.1 - - [22/Sep/2025 12:03:49] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [22/Sep/2025 12:03:49] "POST /api/upload_csv HTTP/1.1" 401 -
+127.0.0.1 - - [22/Sep/2025 12:03:49] "POST /api/upload_csv?geocode=1 HTTP/1.1" 401 -
+127.0.0.1 - - [22/Sep/2025 12:04:07] "POST /api/upload_csv HTTP/1.1" 200 -
+127.0.0.1 - - [22/Sep/2025 12:04:07] "POST /api/upload_csv?geocode=1 HTTP/1.1" 400 -
+127.0.0.1 - - [22/Sep/2025 12:05:11] "POST /api/upload_csv HTTP/1.1" 200 -
+127.0.0.1 - - [22/Sep/2025 12:06:07] "POST /api/upload_csv?geocode=1 HTTP/1.1" 400 -
+127.0.0.1 - - [22/Sep/2025 12:09:15] "POST /api/upload_csv?geocode=1 HTTP/1.1" 400 -
+127.0.0.1 - - [22/Sep/2025 12:11:07] "POST /api/upload_csv?geocode=1 HTTP/1.1" 400 -
+127.0.0.1 - - [22/Sep/2025 12:58:37] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [22/Sep/2025 12:58:38] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [22/Sep/2025 12:58:42] "GET /map HTTP/1.1" 304 -
