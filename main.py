@@ -1,7 +1,7 @@
 import os
 import json
 import logging
-import panda as pd
+import pandas as pd
 import googlemaps
 from google.cloud import storage
 import psycopg2
@@ -12,7 +12,7 @@ logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(
 
 # --- Environment Variables (set in Cloud Run) ---
 PUBSUB_TOPIC = os.environ.get("projects/saferidestar-trip-management/topics/transport-app-csv-upload-topic") # The Pub/Sub topic to subscribe to
-DATABASE_URL = os.environ.get("postgresql://postgres:*ez:\T)yY=j-6L%E@10.118.192.2:5432/postgres") # Connection string for Cloud SQL
+DATABASE_URL = os.environ.get("postgresql://postgres:*ez:\\T)yY=j-6L%E@10.118.192.2:5432/postgres") # Connection string for Cloud SQL
 GOOGLE_MAPS_API_KEY = os.environ.get("AIzaSyAnAnjQtJ96KRWHDSkfyKHsRQaYatUM1Bc") # API key for Google Maps
 STORAGE_BUCKET = os.environ.get("transport-app-raw-data") # Cloud Storage bucket name
 # --- Helper Functions ---
@@ -116,24 +116,6 @@ def store_trip_data_in_db(db_url, trip_data):
             logging.debug("PostgreSQL connection closed.")
 
 
-        # Prepare the SQL query for inserting data
-        insert_query = f"""
-            INSERT INTO {table_name} ({','.join(columns)})
-            VALUES (%s, %s, %s, %s)
-        """
-
-        # Execute the query with the trip data
-        cur.execute(insert_query, trip_data)
-
-        # Commit the changes and close the connection
-        conn.commit()
-        cur.close()
-        conn.close()
-        logging.info(f"Stored trip data in database for trip_id: {trip_data[0]}")
-        return True
-    except Exception as e:
-        logging.error(f"Error storing trip data in database: {e}")
-        return False
 # --- Main Function ---
 
  
