@@ -1,6 +1,0 @@
-Traceback (most recent call last):
-  File "c:\Users\safer\OneDrive\Documents\Route Management Code\mycloudrunproject\vrp_prototype.py", line 870, in <module>
-    sub_routes = solve_vrp(sub_tm, 1, 0, demands=sub_demands, vehicle_capacities=[single_cap], service_times=sub_service_times, time_windows=sub_time_windows)
-  File "c:\Users\safer\OneDrive\Documents\Route Management Code\mycloudrunproject\vrp_prototype.py", line 605, in solve_vrp
-    raise RuntimeError('No solution found')
-RuntimeError: No solution found

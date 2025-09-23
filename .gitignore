@@ -1,0 +1,22 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyc
+*.pyo
+*.pyd
+# virtual env
+.venv/
+env/
+venv/
+# logs and runtime
+*.log
+cluster_*.log
+# IDE
+.vscode/
+# test/cache
+.pytest_cache/
+# local config
+.env
+.env.*
+# data
+*.db

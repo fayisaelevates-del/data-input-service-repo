@@ -1,6 +1,0 @@
-Traceback (most recent call last):
-  File "c:\Users\safer\OneDrive\Documents\Route Management Code\mycloudrunproject\vrp_prototype.py", line 423, in <module>
-    sub_service_times = [0] + [SERVICE_TIMES[i] if i < len(SERVICE_TIMES) else 0 for i in cluster]
-                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "c:\Users\safer\OneDrive\Documents\Route Management Code\mycloudrunproject\vrp_prototype.py", line 333, in solve_vrp
-RuntimeError: No solution found
