@@ -1,0 +1,117 @@
+[
+  {
+    "vehicle": 1,
+    "total_seconds": 4236,
+    "total_hours": 1.18,
+    "stops": [
+      {
+        "sequence": 1,
+        "stop": 1,
+        "lat": 32.2319,
+        "lon": -110.9501,
+        "eta_sec": 182,
+        "service_sec": 600,
+        "depart_sec": 782,
+        "eta_hhmm": "05:03",
+        "depart_hhmm": "05:13"
+      },
+      {
+        "sequence": 2,
+        "stop": 2,
+        "lat": 32.222,
+        "lon": -110.9265,
+        "eta_sec": 960,
+        "service_sec": 600,
+        "depart_sec": 1560,
+        "eta_hhmm": "05:16",
+        "depart_hhmm": "05:26"
+      },
+      {
+        "sequence": 3,
+        "stop": 3,
+        "lat": 32.1916,
+        "lon": -110.9265,
+        "eta_sec": 1803,
+        "service_sec": 600,
+        "depart_sec": 2403,
+        "eta_hhmm": "05:30",
+        "depart_hhmm": "05:40"
+      },
+      {
+        "sequence": 4,
+        "stop": 5,
+        "lat": 32.1328,
+        "lon": -110.9474,
+        "eta_sec": 2894,
+        "service_sec": 600,
+        "depart_sec": 3494,
+        "eta_hhmm": "05:48",
+        "depart_hhmm": "05:58"
+      },
+      {
+        "sequence": 5,
+        "stop": 0,
+        "lat": 32.2226,
+        "lon": -110.9747,
+        "eta_sec": 4236,
+        "service_sec": 0,
+        "depart_sec": 4236,
+        "eta_hhmm": "06:10",
+        "depart_hhmm": "06:10"
+      }
+    ],
+    "violates_shift": false
+  },
+  {
+    "vehicle": 2,
+    "total_seconds": 4066,
+    "total_hours": 1.13,
+    "stops": [
+      {
+        "sequence": 1,
+        "stop": 6,
+        "lat": 32.239,
+        "lon": -110.955,
+        "eta_sec": 187,
+        "service_sec": 600,
+        "depart_sec": 787,
+        "eta_hhmm": "05:03",
+        "depart_hhmm": "05:13"
+      },
+      {
+        "sequence": 2,
+        "stop": 7,
+        "lat": 32.2608,
+        "lon": -110.935,
+        "eta_sec": 1007,
+        "service_sec": 600,
+        "depart_sec": 1607,
+        "eta_hhmm": "05:16",
+        "depart_hhmm": "05:26"
+      },
+      {
+        "sequence": 3,
+        "stop": 4,
+        "lat": 32.3546,
+        "lon": -110.9771,
+        "eta_sec": 2410,
+        "service_sec": 600,
+        "depart_sec": 3010,
+        "eta_hhmm": "05:40",
+        "depart_hhmm": "05:50"
+      },
+      {
+        "sequence": 4,
+        "stop": 0,
+        "lat": 32.2226,
+        "lon": -110.9747,
+        "eta_sec": 4066,
+        "service_sec": 0,
+        "depart_sec": 4066,
+        "eta_hhmm": "06:07",
+        "depart_hhmm": "06:07"
+      }
+    ],
+    "violates_shift": false
+  }
+]

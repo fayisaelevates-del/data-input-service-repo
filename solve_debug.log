@@ -1,0 +1,7 @@
+NUM_VEHICLES=2
+initial_clusters=2
+total_tasks=2
+collected_routes=2
+sample_routes:
+  0: [0, 2, 3, 5, 0]
+  1: [0, 1, 4, 0]

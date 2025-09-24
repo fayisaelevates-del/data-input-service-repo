@@ -1,0 +1,14 @@
+[tool.ruff.lint]
+line-length = 88
+exclude = [".venv", "build", "dist", ".git"]
+per-file-ignores = { "tests/*" = ["D", "T"] }
+
+[tool.mypy]
+python_version = "3.11"
+ignore_missing_imports = true
+strict = false
+# Only run mypy on the core module(s) and tests for now to avoid noise from many scripts.
+files = ["vrp_prototype.py", "tests"]
+follow_imports = "skip"
+# Allow implicit optional types to be permissive during migration
+no_implicit_optional = false

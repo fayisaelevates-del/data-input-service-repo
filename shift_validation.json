@@ -1,0 +1,27 @@
+{
+  "shift_start_seconds": 18000,
+  "shift_end_seconds": 61200,
+  "vehicles": [
+    {
+      "vehicle": 1,
+      "est_start_sec": 0,
+      "est_end_sec": 4200,
+      "shift_seconds": 43200,
+      "violates_shift": false,
+      "stops": [
+        {
+          "stop": 1,
+          "arrival_sec": 1800,
+          "service_sec": 600,
+          "depart_sec": 2400
+        },
+        {
+          "stop": 0,
+          "arrival_sec": 4200,
+          "service_sec": 0,
+          "depart_sec": 4200
+        }
+      ]
+    }
+  ]
+}

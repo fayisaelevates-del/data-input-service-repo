@@ -1,0 +1,11 @@
+{
+  "stops_count": 240,
+  "demands_count": 240,
+  "num_vehicles": 50,
+  "total_demand": 239,
+  "avg_load_per_vehicle": 4.78,
+  "suggested_vehicle_capacity": 10,
+  "service_time_sec_default": 600,
+  "time_window_default": [18000, 61200],
+  "notes": "Counts are approximate based on current input.json; vehicle_capacity set to 10 (safe default). If you want exact counts, run generate_input_analysis.py locally."
+}
