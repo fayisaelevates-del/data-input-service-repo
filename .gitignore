@@ -1,22 +1,57 @@
-# Python
+# Core Python artifacts
 __pycache__/
 *.py[cod]
-*.pyc
 *.pyo
 *.pyd
-# virtual env
+*.so
+
+# Virtual environments
 .venv/
-env/
+.env/
 venv/
-# logs and runtime
+ENV/
+
+# Distribution / packaging
+build/
+dist/
+*.egg-info/
+.eggs/
+
+# Logs and runtime
 *.log
-cluster_*.log
-# IDE
-.vscode/
-# test/cache
+logs/
+server_err.log
+server_out.log
+
+# Test / coverage
+.coverage
+htmlcov/
 .pytest_cache/
-# local config
-.env
-.env.*
-# data
+
+# IDE / editor
+.vscode/
+.idea/
+*.swp
+.DS_Store
+
+# Bytecode caches anywhere
+**/__pycache__/
+
+# Data / temp / local db
+*.sqlite
 *.db
+.tmp/
+.cache/
+
+# Git worktrees metadata (temp clones)
+.git/worktrees/
+
+# Node / frontend (if added later)
+node_modules/
+
+# Ruff / Mypy caches (if enabled)
+.mypy_cache/
+.ruff_cache/
+
+# Misc
+*.bak
