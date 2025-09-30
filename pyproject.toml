@@ -1,6 +1,9 @@
 [tool.ruff]
-line-length = 88
 exclude = [".venv", "build", "dist", ".git", "__pycache__"]
+
+# For compatibility with the Ruff version in CI, configure line length via pycodestyle.
+[tool.ruff.pycodestyle]
+max-line-length = 88
 
 [tool.ruff.lint]
 per-file-ignores = { "tests/*" = ["D", "T"] }
