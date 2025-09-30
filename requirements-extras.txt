@@ -1,0 +1,8 @@
+# Optional / heavy dependencies (install only when needed)
+pandas
+ortools
+folium
+googlemaps
+openrouteservice
+fastapi
+uvicorn

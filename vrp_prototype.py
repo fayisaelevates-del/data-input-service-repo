@@ -26,12 +26,20 @@ warnings.filterwarnings('ignore', message='builtin type SwigPyPacked has no __mo
 warnings.filterwarnings('ignore', message='builtin type SwigPyObject has no __module__ attribute', category=DeprecationWarning)
 warnings.filterwarnings('ignore', message='builtin type swigvarlink has no __module__ attribute', category=DeprecationWarning)
 
+_ORTOOLS_AVAILABLE = True
 try:
     from ortools.constraint_solver import pywrapcp, routing_enums_pb2
-except Exception:
-    raise SystemExit('Please install ortools: pip install ortools')
+except Exception:  # pragma: no cover - optional heavy dependency
+    _ORTOOLS_AVAILABLE = False
+    pywrapcp = None  # type: ignore
+    routing_enums_pb2 = None  # type: ignore
 
-import folium
+_FOLIUM_AVAILABLE = True
+try:
+    import folium  # type: ignore
+except Exception:  # pragma: no cover - optional visual dependency
+    _FOLIUM_AVAILABLE = False
+    folium = None  # type: ignore
 
 # Optional: openrouteservice
 ORS_URL = 'https://api.openrouteservice.org/v2/matrix/driving-car'
@@ -722,16 +730,19 @@ def save_outputs(routes, stops, time_matrix):
     except Exception as e:
         print('Failed to write routes_summary.csv:', e)
 
-    # folium map
-    m = folium.Map(location=stops[0], zoom_start=11)
-    colors = ['red', 'blue', 'green', 'purple', 'orange', 'darkred']
-    for vid, route in enumerate(routes):
-        coords = [stops[i] for i in route]
-        folium.PolyLine(coords, color=colors[vid % len(colors)], weight=4, opacity=0.7).add_to(m)
-        for idx, s in enumerate(route):
-            folium.CircleMarker(location=stops[s], radius=4, color=colors[vid % len(colors)], fill=True).add_to(m)
-    m.save('routes_map.html')
-    print('Saved routes.json and routes_map.html')
+    # folium map (optional)
+    if _FOLIUM_AVAILABLE and folium is not None:  # type: ignore
+        m = folium.Map(location=stops[0], zoom_start=11)
+        colors = ['red', 'blue', 'green', 'purple', 'orange', 'darkred']
+        for vid, route in enumerate(routes):
+            coords = [stops[i] for i in route]
+            folium.PolyLine(coords, color=colors[vid % len(colors)], weight=4, opacity=0.7).add_to(m)
+            for idx, s in enumerate(route):
+                folium.CircleMarker(location=stops[s], radius=4, color=colors[vid % len(colors)], fill=True).add_to(m)
+        m.save('routes_map.html')
+        print('Saved routes.json and routes_map.html')
+    else:
+        print('Skipping folium map generation (folium not installed).')
 
 
 def validate_shifts_and_write(routes, stops, time_matrix):

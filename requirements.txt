@@ -1,24 +1,15 @@
-## Runtime dependencies (pin versions later for prod reproducibility)
+## Core runtime dependencies (pin versions later for prod reproducibility)
 flask
 requests
 numpy
-pandas
-psycopg2-binary
 google-cloud-storage
-googlemaps
-folium
-ortools
-openrouteservice
 google-api-python-client
 google-auth
-fastapi
-uvicorn
 
-## Dev / Test tools
+## Dev / Test
 pytest
 ruff
 mypy
 
-# Notes:
-# - Consider splitting heavy/optional libs into extras or a separate requirements-extras.txt.
-# - Keep this list minimal; add only what production code imports directly.
+# Optional / heavy (moved to requirements-extras.txt): pandas, ortools, folium, googlemaps, openrouteservice, fastapi, uvicorn
+# Install with: pip install -r requirements-extras.txt (or manage via extras in pyproject later)
