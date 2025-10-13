@@ -959,6 +959,15 @@ def api_set_mapping_pref():
             return jsonify({'error': 'id and pref required'}), 400
         upsert_mapping_pref({'id': pid, 'payload': mapping, 'updated_at': time.time()})
         return jsonify({'ok': True})
+
+    # Lightweight health endpoint for readiness/liveness checks
+    @app.route('/healthz', methods=['GET'])
+    def healthz():
+        try:
+            init_db()
+            return jsonify({'status': 'ok'}), 200
+        except Exception as e:
+            return jsonify({'status': 'error', 'detail': str(e)}), 500
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 

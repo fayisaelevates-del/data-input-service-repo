@@ -1,0 +1,70 @@
+name: Deploy to Cloud Run
+
+on:
+  workflow_dispatch:
+    inputs:
+      service:
+        description: 'Cloud Run service name'
+        required: true
+        default: 'data-input-service'
+      region:
+        description: 'GCP region'
+        required: true
+        default: 'us-central1'
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: 'read'
+      id-token: 'write'
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up gcloud
+        uses: google-github-actions/auth@v2
+        with:
+          credentials_json: ${{ secrets.GCP_SA_KEY }}
+
+      - name: Configure gcloud
+        uses: google-github-actions/setup-gcloud@v2
+        with:
+          project_id: ${{ secrets.GCP_PROJECT_ID }}
+
+      - name: Configure Docker auth
+        run: |
+          gcloud auth configure-docker --quiet
+
+      - name: Build and push image
+        env:
+          PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
+          REGION: ${{ github.event.inputs.region }}
+          SERVICE: ${{ github.event.inputs.service }}
+        run: |
+          IMAGE="${{ secrets.GCP_REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/cloud-run-source-deploy/${{ github.event.inputs.service }}:${{ github.sha }}"
+          echo "IMAGE=$IMAGE" >> $GITHUB_ENV
+          docker build -t "$IMAGE" .
+          docker push "$IMAGE"
+
+      - name: Deploy to Cloud Run
+        env:
+          PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
+          REGION: ${{ github.event.inputs.region }}
+          SERVICE: ${{ github.event.inputs.service }}
+        run: |
+          gcloud run deploy "$SERVICE" \
+            --image "$IMAGE" \
+            --region "$REGION" \
+            --platform managed \
+            --allow-unauthenticated \
+            --port 8080 \
+            --set-env-vars PYTHONUNBUFFERED=1
+
+      - name: Show service URL
+        env:
+          REGION: ${{ github.event.inputs.region }}
+          SERVICE: ${{ github.event.inputs.service }}
+        run: |
+          gcloud run services describe "$SERVICE" --region "$REGION" --format 'value(status.url)'
