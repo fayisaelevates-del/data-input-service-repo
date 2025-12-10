@@ -35,10 +35,18 @@
   <div>
     <button id="geocodeBtn">Geocode & Preview</button>
     <button id="addBtn">Add Trip</button>
+    <button id="viewBtn">View Trips</button>
+    <button id="buildBtn">Build Preview</button>
   </div>
 
   <h3>Last Action</h3>
   <pre id="last" style="background:#f6f6f6;padding:10px;border:1px solid #eee"></pre>
+
+  <h3>Trips</h3>
+  <div id="tripsList"></div>
+
+  <h3>Preview Result</h3>
+  <pre id="preview" style="background:#f6f6f6;padding:10px;border:1px solid #eee"></pre>
 
   <script>
     // Show demo key box if DEMO_ADMIN_KEY is configured server-side (we check by trying a noop request)
@@ -89,6 +97,36 @@
       if(json.ok){
         alert('Trip added: ' + json.trip.id);
       }
+    });
+
+    document.getElementById('viewBtn').addEventListener('click', async ()=>{
+      const headers = {};
+      const key = document.getElementById('demoKey').value;
+      if(key) headers['X-DEMO-KEY']=key;
+      const r = await fetch('/api/trips_for_admin', {method:'GET', headers});
+      const json = await r.json();
+      document.getElementById('last').textContent = JSON.stringify(json, null, 2);
+      const listDiv = document.getElementById('tripsList');
+      listDiv.innerHTML = '';
+      if(json.ok && Array.isArray(json.trips)){
+        json.trips.forEach(t=>{
+          const el = document.createElement('div'); el.className='trip';
+          el.textContent = `${t.id} — ${t.label||''} (${t.lat}, ${t.lon})`;
+          listDiv.appendChild(el);
+        });
+      } else {
+        listDiv.textContent = 'No trips';
+      }
+    });
+
+    document.getElementById('buildBtn').addEventListener('click', async ()=>{
+      const headers = {'Content-Type':'application/json'};
+      const key = document.getElementById('demoKey').value;
+      if(key) headers['X-DEMO-KEY']=key;
+      const r = await fetch('/demo/build_preview', {method:'POST', headers});
+      const json = await r.json();
+      document.getElementById('preview').textContent = JSON.stringify(json, null, 2);
+      document.getElementById('last').textContent = JSON.stringify(json, null, 2);
     });
   </script>
 </body>

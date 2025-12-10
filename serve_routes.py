@@ -273,6 +273,30 @@ def api_add_trip():
         return jsonify({'error': str(e)}), 500
 
 
+@app.route('/api/trips_for_admin', methods=['GET'])
+def api_trips_for_admin():
+    """Return all trips for admin UI. If DEMO_ADMIN_KEY is set, require it."""
+    if os.environ.get('DEMO_ADMIN_KEY') and not _check_demo_key():
+        return jsonify({'error': 'demo key required'}), 403
+    try:
+        trips = get_all_trips()
+        return jsonify({'ok': True, 'trips': trips})
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+
+@app.route('/demo/build_preview', methods=['POST'])
+def demo_build_preview():
+    """Build a preview using existing build_preview() and return result. Protected by demo key if set."""
+    if os.environ.get('DEMO_ADMIN_KEY') and not _check_demo_key():
+        return jsonify({'error': 'demo key required'}), 403
+    try:
+        res = build_preview()
+        return jsonify({'ok': True, 'result': res})
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+
 @app.route('/admin')
 def admin_page():
     """Serve a small admin HTML that lets managers type addresses and add trips.
