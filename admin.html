@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Route Manager - Demo Admin</title>
+  <style>
+    body{font-family:Arial,Helvetica,sans-serif;margin:20px}
+    label{display:block;margin-top:10px}
+    input[type=text]{width:400px;padding:6px}
+    button{margin-top:10px;padding:8px 12px}
+    .suggest{margin-top:8px;color:#333}
+    .trip{margin-top:6px;padding:6px;border:1px solid #ddd}
+  </style>
+</head>
+<body>
+  <h2>Route Manager — Demo Admin</h2>
+  <p>This small demo page lets you type an address, geocode it, and add a trip. Use for demos only.</p>
+
+  <div id="keyBox" style="display:none">
+    <label>Demo Admin Key (for requests):</label>
+    <input id="demoKey" type="text" placeholder="Enter DEMO_ADMIN_KEY" />
+  </div>
+
+  <label>Address</label>
+  <input id="address" type="text" placeholder="Start typing an address" autocomplete="off"/>
+  <div id="suggestions" class="suggest"></div>
+
+  <label>Label</label>
+  <input id="label" type="text" placeholder="Optional label" />
+
+  <label>Demand (number of students)</label>
+  <input id="demand" type="number" value="1" min="1" />
+
+  <div>
+    <button id="geocodeBtn">Geocode & Preview</button>
+    <button id="addBtn">Add Trip</button>
+  </div>
+
+  <h3>Last Action</h3>
+  <pre id="last" style="background:#f6f6f6;padding:10px;border:1px solid #eee"></pre>
+
+  <script>
+    // Show demo key box if DEMO_ADMIN_KEY is configured server-side (we check by trying a noop request)
+    async function checkDemoKeyNeeded(){
+      try{
+        const r = await fetch('/api/geocode', {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({q:'test'})});
+        // if 403 with demo key required, show box
+        if(r.status===403){
+          document.getElementById('keyBox').style.display='block';
+        }
+      }catch(e){/* ignore */}
+    }
+    checkDemoKeyNeeded();
+
+    async function geocodeQuery(q){
+      const body = {q:q};
+      const headers = {'Content-Type':'application/json'};
+      const key = document.getElementById('demoKey').value;
+      if(key) headers['X-DEMO-KEY']=key;
+      const r = await fetch('/api/geocode', {method:'POST', headers, body: JSON.stringify(body)});
+      return r;
+    }
+
+    document.getElementById('geocodeBtn').addEventListener('click', async ()=>{
+      const q = document.getElementById('address').value.trim();
+      if(!q) return alert('Enter an address');
+      const r = await geocodeQuery(q);
+      const json = await r.json();
+      document.getElementById('last').textContent = JSON.stringify(json, null, 2);
+      if(json.ok){
+        document.getElementById('suggestions').textContent = `Lat: ${json.lat}, Lon: ${json.lon}`;
+      } else {
+        document.getElementById('suggestions').textContent = 'No geocode result';
+      }
+    });
+
+    document.getElementById('addBtn').addEventListener('click', async ()=>{
+      const addr = document.getElementById('address').value.trim();
+      const label = document.getElementById('label').value.trim();
+      const demand = parseInt(document.getElementById('demand').value||'1',10);
+      if(!addr) return alert('Enter address');
+      const headers = {'Content-Type':'application/json'};
+      const key = document.getElementById('demoKey').value;
+      if(key) headers['X-DEMO-KEY']=key;
+      const r = await fetch('/api/add_trip', {method:'POST', headers, body: JSON.stringify({address:addr,label:label,demand:demand})});
+      const json = await r.json();
+      document.getElementById('last').textContent = JSON.stringify(json, null, 2);
+      if(json.ok){
+        alert('Trip added: ' + json.trip.id);
+      }
+    });
+  </script>
+</body>
+</html>

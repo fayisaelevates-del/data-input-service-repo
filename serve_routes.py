@@ -215,6 +215,77 @@ def get_trip_by_id(tid: str):
             return None
 
 
+# -- Demo helpers: geocode proxy, add trip by address, and admin page
+import uuid
+
+
+def _check_demo_key():
+    """Check DEMO_ADMIN_KEY if set. Returns True if the request includes the key."""
+    demo_key = os.environ.get('DEMO_ADMIN_KEY')
+    if not demo_key:
+        return False
+    try:
+        supplied = flask_request.headers.get('X-DEMO-KEY') or flask_request.args.get('demo_key')
+        return supplied == demo_key
+    except Exception:
+        return False
+
+
+@app.route('/api/geocode', methods=['POST'])
+def api_geocode():
+    """Proxy geocode endpoint for admin UI. Accepts JSON {"q": "address"} and returns {lat, lon}."""
+    try:
+        data = flask_request.get_json(force=True) or {}
+        q = (data.get('q') or '').strip()
+        if not q:
+            return jsonify({'error': 'q required'}), 400
+        lat, lon = _geocode_query(q)
+        if lat is None or lon is None:
+            return jsonify({'ok': False, 'lat': None, 'lon': None})
+        return jsonify({'ok': True, 'lat': lat, 'lon': lon})
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+
+@app.route('/api/add_trip', methods=['POST'])
+def api_add_trip():
+    """Add a trip by address from the admin UI. Body: {"address": "...", "label": "...", "demand": 1}
+    Protected by DEMO_ADMIN_KEY when set in env.
+    """
+    # Demo key check (if DEMO_ADMIN_KEY is set)
+    if os.environ.get('DEMO_ADMIN_KEY') and not _check_demo_key():
+        return jsonify({'error': 'demo key required'}), 403
+    try:
+        payload = flask_request.get_json(force=True) or {}
+        addr = (payload.get('address') or '').strip()
+        label = payload.get('label') or ''
+        demand = int(payload.get('demand') or 1)
+        if not addr:
+            return jsonify({'error': 'address required'}), 400
+        lat, lon = _geocode_query(addr)
+        if lat is None or lon is None:
+            return jsonify({'error': 'geocode failed for address'}), 400
+        tid = f"demo-{uuid.uuid4().hex[:8]}"
+        trip = {'id': tid, 'lat': float(lat), 'lon': float(lon), 'label': label, 'demand': demand, 'service_sec': 600, 'tw_start': 5*3600, 'tw_end': 17*3600}
+        upsert_trip(trip)
+        return jsonify({'ok': True, 'trip': trip})
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+
+@app.route('/admin')
+def admin_page():
+    """Serve a small admin HTML that lets managers type addresses and add trips.
+    If DEMO_ADMIN_KEY is set, the page will prompt for the key to include in requests.
+    """
+    try:
+        return send_from_directory('.', 'admin.html')
+    except Exception:
+        # fallback to a tiny inline page
+        html = '''<!doctype html><html><head><meta charset="utf-8"><title>Admin Demo</title></head><body><h3>Admin Demo - place holder</h3></body></html>'''
+        return render_template_string(html)
+
+
 def parse_csv_to_trips(fh, mapping: dict = None, geocode_missing: bool = False) -> list:
     """Parse a text file-like object into a list of trip dicts.
     Accepts CSV/TSV with header or freeform lines with lat/lon pairs.
