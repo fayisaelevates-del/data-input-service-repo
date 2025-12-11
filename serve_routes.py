@@ -231,6 +231,13 @@ def _check_demo_key():
         return False
 
 
+# Ensure Flask `app` exists before any @app.route decorators are used.
+# Some import-time edits can move the app creation later in the file; guard here
+# so the module can be imported or run without NameError.
+if 'app' not in globals():
+    app = Flask(__name__, static_folder='.')
+
+
 @app.route('/api/geocode', methods=['POST'])
 def api_geocode():
     """Proxy geocode endpoint for admin UI. Accepts JSON {"q": "address"} and returns {lat, lon}."""
