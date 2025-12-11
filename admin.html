@@ -42,6 +42,7 @@
         <option value="">(random)</option>
       </select>
       <button id="simulateBtn">Simulate Breakdown</button>
+      <button id="loadSampleBtn" style="margin-left:8px">Load sample</button>
   </div>
 
   <h3>Last Action</h3>
@@ -150,6 +151,27 @@
       document.getElementById('last').textContent = JSON.stringify(json, null, 2);
       if(json && json.ok && Array.isArray(json.changes) && json.changes.length){
         alert('Simulation produced ' + json.changes.length + ' reassignment(s). See Preview for details.');
+      }
+    });
+
+    // Load sample data button
+    document.getElementById('loadSampleBtn').addEventListener('click', async ()=>{
+      if(!confirm('Load deterministic sample drivers & trips for demo? This can optionally clear existing data. Click OK to load and clear existing data.')) return;
+      const headers = {'Content-Type':'application/json'};
+      const key = document.getElementById('demoKey').value;
+      if(key) headers['X-DEMO-KEY']=key;
+      // request with clear_existing=true so demos are repeatable
+      try{
+        const r = await fetch('/demo/load_sample', {method:'POST', headers, body: JSON.stringify({clear_existing: true})});
+        const json = await r.json();
+        document.getElementById('last').textContent = JSON.stringify(json, null, 2);
+        document.getElementById('preview').textContent = JSON.stringify(json, null, 2);
+        // refresh drivers and trips lists so UI reflects loaded sample
+        try{ await loadDrivers(); }catch(e){}
+        try{ document.getElementById('viewBtn').click(); }catch(e){}
+        alert('Sample data loaded: ' + (json.trips_created || json.trips_created === 0 ? json.trips_created : '') + ' trips, ' + (json.drivers_created || json.drivers_created === 0 ? json.drivers_created : '') + ' drivers');
+      }catch(e){
+        alert('Load sample failed: ' + e);
       }
     });
 
