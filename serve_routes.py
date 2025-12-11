@@ -297,6 +297,105 @@ def demo_build_preview():
         return jsonify({'error': str(e)}), 500
 
 
+@app.route('/demo/simulate_breakdown', methods=['POST'])
+def demo_simulate_breakdown():
+    """Simulate a driver breakdown for demo purposes.
+    Optional JSON body: {'driver_id': '<id>'}. If not provided, a random active driver is chosen.
+    This endpoint computes the current preview, temporarily marks the chosen driver inactive,
+    recomputes the preview, then restores the driver record. It returns the before/after
+    previews and a compact list of trip reassignments suggested by the system.
+    Protected by DEMO_ADMIN_KEY when set.
+    """
+    # Demo key check (if DEMO_ADMIN_KEY is set)
+    if os.environ.get('DEMO_ADMIN_KEY') and not _check_demo_key():
+        return jsonify({'error': 'demo key required'}), 403
+    try:
+        payload = flask_request.get_json(force=True) or {}
+        chosen = payload.get('driver_id')
+
+        drivers = get_all_drivers()
+        active_drvs = [d for d in drivers.values() if d.get('active', True)]
+        if not active_drvs:
+            return jsonify({'error': 'no active drivers available to simulate'}), 400
+
+        # choose a driver if not supplied
+        if not chosen:
+            import random
+            chosen_drv = random.choice(active_drvs)
+        else:
+            chosen_drv = drivers.get(str(chosen))
+            if not chosen_drv:
+                return jsonify({'error': 'driver not found'}), 404
+            if not chosen_drv.get('active', True):
+                return jsonify({'error': 'driver already inactive'}), 400
+
+        chosen_id = str(chosen_drv.get('id'))
+
+        # baseline preview
+        try:
+            baseline = build_preview()
+        except Exception as e:
+            baseline = {'error': f'baseline build_preview failed: {e}'}
+
+        # Temporarily mark driver inactive in DB (persisted then restored)
+        original = dict(chosen_drv)
+        try:
+            updated = dict(chosen_drv)
+            updated['active'] = False
+            upsert_driver(updated)
+
+            after = build_preview()
+        except Exception as e:
+            # attempt restore before returning
+            try:
+                upsert_driver(original)
+            except Exception:
+                pass
+            return jsonify({'error': f'simulation failed: {e}'}), 500
+
+        # restore driver
+        try:
+            upsert_driver(original)
+        except Exception:
+            # non-fatal; warn in response
+            restore_err = True
+        else:
+            restore_err = False
+
+        # compute diffs between baseline and after (based on per_driver_trip_ids)
+        changes = []
+        try:
+            base_map = baseline.get('per_driver_trip_ids', {}) if isinstance(baseline, dict) else {}
+            after_map = after.get('per_driver_trip_ids', {}) if isinstance(after, dict) else {}
+            # collect all trip ids seen
+            all_trip_ids = set()
+            for v in base_map.values():
+                all_trip_ids.update(v or [])
+            for v in after_map.values():
+                all_trip_ids.update(v or [])
+
+            for tid in sorted(all_trip_ids):
+                from_drv = None
+                to_drv = None
+                for k, v in base_map.items():
+                    if v and tid in v:
+                        from_drv = k
+                        break
+                for k, v in after_map.items():
+                    if v and tid in v:
+                        to_drv = k
+                        break
+                if from_drv != to_drv:
+                    changes.append({'trip_id': tid, 'from': from_drv, 'to': to_drv})
+        except Exception:
+            changes = []
+
+        resp = {'ok': True, 'simulated_driver': chosen_id, 'baseline_summary': {'per_driver_counts': {k: len(v) for k, v in (baseline.get('per_driver_trip_ids') or {}).items()}}, 'after_summary': {'per_driver_counts': {k: len(v) for k, v in (after.get('per_driver_trip_ids') or {}).items()}}, 'changes': changes, 'restore_warning': restore_err}
+        return jsonify(resp)
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+
 @app.route('/admin')
 def admin_page():
     """Serve a small admin HTML that lets managers type addresses and add trips.
@@ -1054,17 +1153,18 @@ def api_set_mapping_pref():
             return jsonify({'error': 'id and pref required'}), 400
         upsert_mapping_pref({'id': pid, 'payload': mapping, 'updated_at': time.time()})
         return jsonify({'ok': True})
-
-    # Lightweight health endpoint for readiness/liveness checks
-    @app.route('/healthz', methods=['GET'])
-    def healthz():
-        try:
-            init_db()
-            return jsonify({'status': 'ok'}), 200
-        except Exception as e:
-            return jsonify({'status': 'error', 'detail': str(e)}), 500
     except Exception as e:
         return jsonify({'error': str(e)}), 500
+
+
+# Lightweight health endpoint for readiness/liveness checks
+@app.route('/healthz', methods=['GET'])
+def healthz():
+    try:
+        init_db()
+        return jsonify({'status': 'ok'}), 200
+    except Exception as e:
+        return jsonify({'status': 'error', 'detail': str(e)}), 500
 
 
 @app.route('/api/preview', methods=['POST'])

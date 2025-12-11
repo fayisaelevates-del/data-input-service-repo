@@ -32,11 +32,12 @@
   <label>Demand (number of students)</label>
   <input id="demand" type="number" value="1" min="1" />
 
-  <div>
+    <div>
     <button id="geocodeBtn">Geocode & Preview</button>
     <button id="addBtn">Add Trip</button>
     <button id="viewBtn">View Trips</button>
     <button id="buildBtn">Build Preview</button>
+    <button id="simulateBtn">Simulate Breakdown</button>
   </div>
 
   <h3>Last Action</h3>
@@ -127,6 +128,21 @@
       const json = await r.json();
       document.getElementById('preview').textContent = JSON.stringify(json, null, 2);
       document.getElementById('last').textContent = JSON.stringify(json, null, 2);
+    });
+
+    document.getElementById('simulateBtn').addEventListener('click', async ()=>{
+      const headers = {'Content-Type':'application/json'};
+      const key = document.getElementById('demoKey').value;
+      if(key) headers['X-DEMO-KEY']=key;
+      // Optional: we could prompt for a driver id. For now let server pick a random active driver.
+      const r = await fetch('/demo/simulate_breakdown', {method:'POST', headers, body: JSON.stringify({})});
+      const json = await r.json();
+      // show results in the preview pane and last action
+      document.getElementById('preview').textContent = JSON.stringify(json, null, 2);
+      document.getElementById('last').textContent = JSON.stringify(json, null, 2);
+      if(json && json.ok && Array.isArray(json.changes) && json.changes.length){
+        alert('Simulation produced ' + json.changes.length + ' reassignment(s). See Preview for details.');
+      }
     });
   </script>
 </body>
