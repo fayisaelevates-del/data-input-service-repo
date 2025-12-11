@@ -33,11 +33,15 @@
   <input id="demand" type="number" value="1" min="1" />
 
     <div>
-    <button id="geocodeBtn">Geocode & Preview</button>
-    <button id="addBtn">Add Trip</button>
-    <button id="viewBtn">View Trips</button>
-    <button id="buildBtn">Build Preview</button>
-    <button id="simulateBtn">Simulate Breakdown</button>
+      <button id="geocodeBtn">Geocode & Preview</button>
+      <button id="addBtn">Add Trip</button>
+      <button id="viewBtn">View Trips</button>
+      <button id="buildBtn">Build Preview</button>
+      <label style="margin-left:12px;display:inline-block">Simulate driver:</label>
+      <select id="simulateDriver" style="min-width:220px;margin-left:6px">
+        <option value="">(random)</option>
+      </select>
+      <button id="simulateBtn">Simulate Breakdown</button>
   </div>
 
   <h3>Last Action</h3>
@@ -115,6 +119,8 @@
           el.textContent = `${t.id} — ${t.label||''} (${t.lat}, ${t.lon})`;
           listDiv.appendChild(el);
         });
+        // refresh driver dropdown after viewing trips (drivers may change)
+        try{ await loadDrivers(); }catch(e){/* ignore */}
       } else {
         listDiv.textContent = 'No trips';
       }
@@ -134,8 +140,10 @@
       const headers = {'Content-Type':'application/json'};
       const key = document.getElementById('demoKey').value;
       if(key) headers['X-DEMO-KEY']=key;
-      // Optional: we could prompt for a driver id. For now let server pick a random active driver.
-      const r = await fetch('/demo/simulate_breakdown', {method:'POST', headers, body: JSON.stringify({})});
+      const sel = document.getElementById('simulateDriver');
+      const val = sel && sel.value ? sel.value : '';
+      const body = val ? {driver_id: val} : {};
+      const r = await fetch('/demo/simulate_breakdown', {method:'POST', headers, body: JSON.stringify(body)});
       const json = await r.json();
       // show results in the preview pane and last action
       document.getElementById('preview').textContent = JSON.stringify(json, null, 2);
@@ -144,6 +152,35 @@
         alert('Simulation produced ' + json.changes.length + ' reassignment(s). See Preview for details.');
       }
     });
+
+    // Populate drivers dropdown by calling /api/live_status
+    async function loadDrivers(){
+      try{
+        const r = await fetch('/api/live_status');
+        if(!r.ok) return;
+        const j = await r.json();
+        if(!j.ok) return;
+        const drivers = j.drivers || [];
+        const sel = document.getElementById('simulateDriver');
+        sel.innerHTML = '';
+        const opt = document.createElement('option'); opt.value = ''; opt.textContent = '(random)'; sel.appendChild(opt);
+        drivers.forEach(d => {
+          try{
+            const id = d.id || d['id'] || (d.payload && JSON.parse(d.payload).id) || '';
+            const label = d.label || d.name || (d.payload && (()=>{try{return JSON.parse(d.payload).label||JSON.parse(d.payload).name}catch(e){return ''}})()) || `${d.lat||d.latitude||''},${d.lon||d.longitude||''}`;
+            const isActive = (typeof d.active === 'undefined') || d.active === true;
+            const option = document.createElement('option');
+            option.value = id;
+            option.textContent = `${id} — ${label}`;
+            if(!isActive) option.disabled = true;
+            sel.appendChild(option);
+          }catch(e){/* ignore per-driver parse errors */}
+        });
+      }catch(e){/* ignore */}
+    }
+
+    // Load drivers on page load
+    loadDrivers();
   </script>
 </body>
 </html>
