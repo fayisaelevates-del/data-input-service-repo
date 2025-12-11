@@ -704,6 +704,26 @@ def require_token(f):
         return f(*args, **kwargs)
     return inner
 
+
+# Admin feature toggle: set ENABLE_ADMIN=0 to disable admin/demo UI and endpoints
+ADMIN_ENABLED = os.environ.get('ENABLE_ADMIN', '1') not in ('0', 'false', 'False')
+
+
+@app.before_request
+def _maybe_disable_admin():
+    """If admin features are disabled, block admin/demo related paths early.
+    This lets us keep admin code in the tree while quickly disabling the UI and demo endpoints.
+    """
+    if ADMIN_ENABLED:
+        return None
+    # paths to block when admin is disabled
+    p = (flask_request.path or '')
+    admin_prefixes = ('/admin', '/api/geocode', '/api/add_trip', '/api/trips_for_admin', '/demo', '/admin.html')
+    for ap in admin_prefixes:
+        if p.startswith(ap):
+            return jsonify({'error': 'admin features are disabled'}), 404
+    return None
+
 def haversine(a, b):
     # lat/lon tuples
     import math
