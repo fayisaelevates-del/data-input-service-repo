@@ -484,12 +484,9 @@ def admin_page():
     """Serve a small admin HTML that lets managers type addresses and add trips.
     If DEMO_ADMIN_KEY is set, the page will prompt for the key to include in requests.
     """
-    try:
-        return send_from_directory('.', 'admin.html')
-    except Exception:
-        # fallback to a tiny inline page
-        html = '''<!doctype html><html><head><meta charset="utf-8"><title>Admin Demo</title></head><body><h3>Admin Demo - place holder</h3></body></html>'''
-        return render_template_string(html)
+    # admin UI was removed for now; keep a small informational placeholder.
+    msg = '<!doctype html><html><head><meta charset="utf-8"><title>Admin disabled</title></head><body><h3>Admin UI removed</h3><p>The admin/demo UI has been removed from this deployment. Use the API endpoints instead.</p></body></html>'
+    return render_template_string(msg)
 
 
 def parse_csv_to_trips(fh, mapping: dict = None, geocode_missing: bool = False) -> list:
