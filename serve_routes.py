@@ -396,6 +396,82 @@ def demo_simulate_breakdown():
         return jsonify({'error': str(e)}), 500
 
 
+@app.route('/demo/load_sample', methods=['POST'])
+def demo_load_sample():
+    """Load a deterministic set of sample drivers and trips for demo purposes.
+    POST body optional: {'clear_existing': true} will clear trips and drivers before loading.
+    Protected by DEMO_ADMIN_KEY when set.
+    Returns counts and lists of created ids.
+    """
+    # Demo key check (if DEMO_ADMIN_KEY is set)
+    if os.environ.get('DEMO_ADMIN_KEY') and not _check_demo_key():
+        return jsonify({'error': 'demo key required'}), 403
+    try:
+        payload = flask_request.get_json(force=True) or {}
+        clear = bool(payload.get('clear_existing'))
+
+        # simple clear if requested
+        if clear:
+            try:
+                with closing(sqlite3.connect(DB_PATH)) as conn:
+                    cur = conn.cursor()
+                    cur.execute('DELETE FROM trips')
+                    cur.execute('DELETE FROM drivers')
+                    conn.commit()
+            except Exception:
+                pass
+
+        # deterministic sample centered around a known depot
+        depot = vrp_prototype.STOPS[0] if hasattr(vrp_prototype, 'STOPS') else (32.257254, -110.9723225)
+        # sample drivers: 3 drivers spaced around depot
+        sample_drivers = [
+            {'id': 'drv-1', 'lat': depot[0] + 0.01, 'lon': depot[1] + 0.01, 'label': 'Driver 1', 'active': True},
+            {'id': 'drv-2', 'lat': depot[0] - 0.008, 'lon': depot[1] + 0.012, 'label': 'Driver 2', 'active': True},
+            {'id': 'drv-3', 'lat': depot[0] + 0.012, 'lon': depot[1] - 0.01, 'label': 'Driver 3', 'active': True},
+        ]
+
+        # sample trips (clustered around drivers)
+        sample_trips = [
+            {'id': 'trip-1', 'lat': depot[0] + 0.011, 'lon': depot[1] + 0.009, 'label': 'Stop A', 'demand': 1},
+            {'id': 'trip-2', 'lat': depot[0] + 0.009, 'lon': depot[1] + 0.014, 'label': 'Stop B', 'demand': 2},
+            {'id': 'trip-3', 'lat': depot[0] - 0.007, 'lon': depot[1] + 0.015, 'label': 'Stop C', 'demand': 1},
+            {'id': 'trip-4', 'lat': depot[0] - 0.006, 'lon': depot[1] + 0.01, 'label': 'Stop D', 'demand': 1},
+            {'id': 'trip-5', 'lat': depot[0] + 0.013, 'lon': depot[1] - 0.008, 'label': 'Stop E', 'demand': 1},
+            {'id': 'trip-6', 'lat': depot[0] + 0.014, 'lon': depot[1] - 0.011, 'label': 'Stop F', 'demand': 1},
+        ]
+
+        created_drivers = []
+        created_trips = []
+        now = time.time()
+        for d in sample_drivers:
+            drv = {'id': d['id'], 'lat': float(d['lat']), 'lon': float(d['lon']), 'label': d.get('label'), 'active': d.get('active', True), 'updated_at': now}
+            try:
+                upsert_driver(drv)
+                created_drivers.append(drv['id'])
+            except Exception:
+                pass
+
+        for t in sample_trips:
+            trip = {'id': t['id'], 'lat': float(t['lat']), 'lon': float(t['lon']), 'label': t.get('label'), 'demand': int(t.get('demand', 1)), 'service_sec': 600, 'tw_start': 5*3600, 'tw_end': 17*3600}
+            try:
+                upsert_trip(trip)
+                created_trips.append(trip['id'])
+            except Exception:
+                pass
+
+        # Refresh any caches if present
+        global _TRIPS, _DRIVERS
+        try:
+            _TRIPS = get_all_trips()
+            _DRIVERS = get_all_drivers()
+        except Exception:
+            pass
+
+        return jsonify({'ok': True, 'drivers_created': len(created_drivers), 'trips_created': len(created_trips), 'driver_ids': created_drivers, 'trip_ids': created_trips})
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+
 @app.route('/admin')
 def admin_page():
     """Serve a small admin HTML that lets managers type addresses and add trips.
